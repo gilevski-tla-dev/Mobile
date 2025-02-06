@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Profile } from "@/pages/Profile";
 import { Home } from "@/pages/Home";
+import { CameraPage } from "@/pages/CameraPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +28,12 @@ export default function Tabs() {
         name="Profile"
         component={Profile}
         options={{ title: "Профиль" }}
+      />
+
+      <Tab.Screen
+        name="Camera"
+        component={CameraPage}
+        options={{ title: "Камера" }}
       />
     </Tab.Navigator>
   );
