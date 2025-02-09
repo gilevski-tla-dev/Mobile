@@ -2,9 +2,12 @@ import { StyleSheet, Text, View, FlatList } from "react-native";
 import React from "react";
 import { useCards } from "@/features/home/api/homeApi";
 import { Card } from "@/features/home";
+import { useTheme } from "@/app/providers/ThemeProvider";
+import { ToggleTheme } from "@/features/toggleTheme";
 
 export const Home = () => {
   const { data, error, isLoading } = useCards();
+  const { theme } = useTheme();
 
   if (isLoading) {
     return (
@@ -23,7 +26,7 @@ export const Home = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Text style={styles.mainText}>Домашняя страница</Text>
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -43,6 +46,7 @@ export const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     justifyContent: "center",
     alignItems: "center",
     padding: 20,

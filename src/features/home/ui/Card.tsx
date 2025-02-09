@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useTheme } from "@/app/providers/ThemeProvider";
 
 interface CardProps {
   imageSource: { uri: string };
