@@ -1,29 +1,50 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import React from "react";
 import { useCards } from "@/features/home/api/homeApi";
 import { Card } from "@/features/home";
 import { useTheme } from "@/app/providers/ThemeProvider";
-import { ToggleTheme } from "@/features/toggleTheme";
 
 export const Home = () => {
-  const { data, error, isLoading } = useCards();
+  const {
+    data,
+    error,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useCards();
   const { theme } = useTheme();
+
+  const loadMore = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   if (isLoading) {
     return (
-      <View>
-        <Text>Loading...</Text>
+      <View style={styles.centerContainer}>
+        <Text>Загрузка...</Text>
       </View>
     );
   }
 
   if (error instanceof Error) {
     return (
-      <View>
-        <Text>Error: {error.message}</Text>
+      <View style={styles.centerContainer}>
+        <Text>Ошибка: {error.message}</Text>
       </View>
     );
   }
+
+  // Объединяем все страницы в один массив
+  const cards = data?.pages.flat() || [];
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -31,13 +52,23 @@ export const Home = () => {
       <FlatList
         showsVerticalScrollIndicator={false}
         style={styles.list}
-        data={data}
+        data={cards}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Card imageSource={{ uri: item.avatar }} text={item.name} />
         )}
-        // разделитель между элементами
         ItemSeparatorComponent={() => <View style={styles.separator} />}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator
+              size="large"
+              color={theme.text}
+              style={styles.loader}
+            />
+          ) : null
+        }
       />
     </View>
   );
@@ -46,10 +77,14 @@ export const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   mainText: {
     fontSize: 20,
@@ -60,6 +95,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 20, // отступ между карточками
+  },
+  loader: {
+    marginVertical: 20, // отступ для индикатора загрузки
   },
 });
 
