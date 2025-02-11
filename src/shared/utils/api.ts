@@ -1,7 +1,7 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "https://665730a89f970b3b36c84dc4.mockapi.io/",
+  baseURL: "https://d5drmanskpnak11q18rg.g3ab4gln.apigw.yandexcloud.net",
   timeout: 10000, // таймаут для запросов (например, 10 секунд)
   headers: {
     "Content-Type": "application/json",
@@ -11,6 +11,21 @@ const axiosInstance: AxiosInstance = axios.create({
 export const fetchData = async (endpoint: string) => {
   try {
     const response = await axiosInstance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};
+
+// Функция для POST-запроса
+export const postData = async (
+  endpoint: string,
+  data: any,
+  headers?: Record<string, string>
+) => {
+  try {
+    const response = await axiosInstance.post(endpoint, data, { headers });
     return response.data;
   } catch (error) {
     handleApiError(error);

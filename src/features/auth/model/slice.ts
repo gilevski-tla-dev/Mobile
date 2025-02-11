@@ -1,29 +1,33 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   isAuthenticated: boolean;
+  accessToken: string | null;
 }
 
 // Начальное состояние
 const initialState: AuthState = {
   isAuthenticated: false,
+  accessToken: null,
 };
 
 // slice
 const authSlice = createSlice({
-  name: "auth", // Имя slice
+  name: "auth",
   initialState,
   reducers: {
-    login(state) {
-      state.isAuthenticated = true; // Пользователь авторизован
+    login(state, action: PayloadAction<string>) {
+      state.isAuthenticated = true;
+      state.accessToken = action.payload; // Сохраняем токен в Redux
     },
     logout(state) {
-      state.isAuthenticated = false; // Пользователь вышел
+      state.isAuthenticated = false;
+      state.accessToken = null; // Удаляем токен при выходе
     },
   },
 });
 
-// Экспортируем действия и редьюсер
+// Экспортируем экшены и редьюсер
 export const { login, logout } = authSlice.actions;
 export const authReducer = authSlice.reducer;
 
