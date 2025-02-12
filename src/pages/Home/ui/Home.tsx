@@ -1,12 +1,19 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   FlatList,
   ActivityIndicator,
+  TextInput,
+  Button,
 } from "react-native";
-import React from "react";
-import { useCards } from "@/features/home/api/homeApi";
+import {
+  useCards,
+  useDeleteCard,
+  useCreateCard,
+  useUpdateCard,
+} from "@/features/home/api/homeApi"; // Добавляем useUpdateCard
 import { Card } from "@/features/home";
 import { useTheme } from "@/app/providers/ThemeProvider";
 
@@ -20,11 +27,28 @@ export const Home = () => {
     isFetchingNextPage,
   } = useCards();
   const { theme } = useTheme();
+  const { mutate: deleteCard } = useDeleteCard(); // Используем хук удаления
+  const { mutate: createCard } = useCreateCard(); // Используем хук создания карточки
+  const { mutate: updateCard } = useUpdateCard(); // Используем хук обновления карточки
+  const [newCardName, setNewCardName] = useState(""); // Состояние для имени новой карточки
 
   const loadMore = () => {
     if (hasNextPage) {
       fetchNextPage();
     }
+  };
+
+  const handleAddCard = () => {
+    if (!newCardName.trim()) {
+      alert("Введите название карточки");
+      return;
+    }
+    createCard(newCardName); // Создаем новую карточку
+    setNewCardName(""); // Очищаем поле ввода
+  };
+
+  const handleEditCard = (cardId: string, newText: string) => {
+    updateCard({ id: cardId, name: newText }); // Обновляем карточку
   };
 
   if (isLoading) {
@@ -48,14 +72,31 @@ export const Home = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={styles.mainText}>Домашняя страница</Text>
+      {/* Поле для ввода названия новой карточки */}
+      <View style={styles.addCardContainer}>
+        <TextInput
+          style={[styles.input, { color: theme.text, borderColor: theme.text }]}
+          placeholder="Введите название карточки"
+          placeholderTextColor={theme.text}
+          value={newCardName}
+          onChangeText={setNewCardName}
+        />
+        <Button title="Добавить карточку" onPress={handleAddCard} />
+      </View>
+
+      {/* Список карточек */}
       <FlatList
         showsVerticalScrollIndicator={false}
         style={styles.list}
         data={cards}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Card imageSource={{ uri: item.avatar }} text={item.name} />
+          <Card
+            imageSource={{ uri: item.avatar }}
+            text={item.name}
+            onDelete={() => deleteCard(item.id)}
+            onEdit={(newText) => handleEditCard(item.id, newText)} // Передаём функцию редактирования
+          />
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         onEndReached={loadMore}
@@ -98,6 +139,16 @@ const styles = StyleSheet.create({
   },
   loader: {
     marginVertical: 20, // отступ для индикатора загрузки
+  },
+  addCardContainer: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
   },
 });
 
