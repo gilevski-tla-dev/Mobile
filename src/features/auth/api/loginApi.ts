@@ -1,14 +1,11 @@
 import { handleApiError, postData } from "@/shared/utils/api";
-import { useMutation } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { login } from "../model/slice";
 
-interface LoginResponse {
+export interface LoginResponse {
   access_token: string; // JWT-токен
   token_type: "bearer"; // Тип токена (в данном случае всегда "bearer")
 }
 
-interface LoginFormData {
+export interface LoginFormData {
   username: string; // Имя пользователя
   password: string; // Пароль
 }
@@ -29,20 +26,4 @@ export const loginUser = async (
     handleApiError(error);
     throw error;
   }
-};
-
-// Хук для авторизации
-export const useLogin = () => {
-  const dispatch = useDispatch();
-
-  return useMutation<LoginResponse, Error, LoginFormData>({
-    mutationFn: loginUser,
-    onSuccess: (data) => {
-      console.log("Login successful:", data);
-      dispatch(login(data.access_token)); // Сохраняем токен в Redux
-    },
-    onError: (error) => {
-      console.error("Login failed:", error);
-    },
-  });
 };

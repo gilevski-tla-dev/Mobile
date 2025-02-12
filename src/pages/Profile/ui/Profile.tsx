@@ -6,15 +6,17 @@ import {
   Animated,
 } from "react-native";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
-import { logout } from "@/features/auth/model/slice";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 
 export const Profile = () => {
   const [scale] = useState(new Animated.Value(1)); // Начальное значение масштаба
   const [isPressed, setIsPressed] = useState(false); // Состояние для отслеживания нажатия
-  const dispatch = useDispatch(); // Для отправки экшенов
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken); // Получаем токен из состояния
+
+  const logoutMutation = useLogout();
+
+  const handleLogout = () => {
+    logoutMutation.mutate(); // Вызываем мутацию для выхода
+  };
 
   const handlePress = () => {
     // Проверяем, было ли нажатие, и меняем масштаб
@@ -26,15 +28,10 @@ export const Profile = () => {
     setIsPressed(!isPressed); // Переключаем состояние нажатия
   };
 
-  const handleLogout = () => {
-    dispatch(logout()); // Отправляем экшен logout для изменения состояния в Redux
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Профиль</Text>
-      <Text style={styles.tokenText}>Токен доступа: {accessToken}</Text>{" "}
-      {/* Отображаем токен */}
+
       <TouchableOpacity onPress={handlePress} style={styles.button}>
         <Animated.View
           style={[styles.buttonContainer, { transform: [{ scale }] }]}
@@ -44,9 +41,8 @@ export const Profile = () => {
           </Text>
         </Animated.View>
       </TouchableOpacity>
-      {/* Кнопка для выхода */}
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutButtonText}>Выйти</Text>
+      <TouchableOpacity onPress={handleLogout}>
+        <Text>Выйти</Text>
       </TouchableOpacity>
     </View>
   );
