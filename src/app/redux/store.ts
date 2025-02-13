@@ -10,6 +10,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false, // Отключаем проверку для thunks
     }),
+
 });
 
 // Типы для TypeScript
