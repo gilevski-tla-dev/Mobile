@@ -6,6 +6,7 @@ import { Home } from "@/pages/Home";
 import { CameraPage } from "@/pages/CameraPage";
 import { Authorization } from "@/pages/Authorization";
 import { RootState } from "../redux/store";
+import { Registration } from "@/pages/Registration";
 
 const Tab = createBottomTabNavigator();
 
@@ -49,11 +50,18 @@ export default function Tabs() {
           />
         </>
       ) : (
-        <Tab.Screen
-          name="Authorization"
-          component={Authorization}
-          options={{ title: "Авторизация" }}
-        />
+        <>
+          <Tab.Screen
+            name="Authorization"
+            component={Authorization}
+            options={{ title: "Авторизация" }}
+          />
+          <Tab.Screen
+            name="Registration"
+            component={Registration}
+            options={{ title: "Registration" }}
+          />
+        </>
       )}
     </Tab.Navigator>
   );

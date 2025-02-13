@@ -4,6 +4,7 @@ import {
   removeStorageItem,
   getStorageItem,
 } from "@/shared/lib/storage";
+import { AppDispatch } from "@/app/redux/store";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -40,7 +41,8 @@ export const { login, logout, restoreToken } = authSlice.actions;
 export const authReducer = authSlice.reducer;
 
 // Thunk для инициализации токена
-export const initializeAuth = () => async (dispatch: any) => {
+
+export const initializeAuth = () => async (dispatch: AppDispatch) => {
   const token = await getStorageItem("accessToken");
   dispatch(restoreToken(token));
 };
