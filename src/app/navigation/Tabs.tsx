@@ -124,6 +124,7 @@ export default function Tabs() {
           />
         </>
       ) : (
+        // TODO Убрать тут TabBar
         <>
           <Tab.Screen
             name="Authorization"
