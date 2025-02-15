@@ -1,6 +1,7 @@
 import { authReducer } from "@/features/auth/model/slice";
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import logger from "redux-logger"; // Импортируем redux-logger
 
 export const store = configureStore({
   reducer: {
@@ -9,8 +10,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // Отключаем проверку для thunks
-    }),
-
+    }).concat(logger), // Добавляем redux-logger в middleware
 });
 
 // Типы для TypeScript

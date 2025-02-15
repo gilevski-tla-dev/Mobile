@@ -6,7 +6,7 @@ export interface LoginResponse {
 }
 
 export interface LoginFormData {
-  username: string; // Имя пользователя
+  email: string; // Имя пользователя
   password: string; // Пароль
 }
 
@@ -15,7 +15,7 @@ export const loginUser = async (
   formData: LoginFormData
 ): Promise<LoginResponse> => {
   const data = new URLSearchParams();
-  data.append("username", formData.username);
+  data.append("username", formData.email);
   data.append("password", formData.password);
 
   try {

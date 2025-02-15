@@ -25,44 +25,44 @@ export default function Tabs() {
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{ headerShown: false }}
     >
-      {/* {isAuthenticated ? ( */}
-      <>
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{ tabBarLabel: "Главная" }}
-        />
-        <Tab.Screen
-          name="Diagnostic"
-          component={Diagnostic}
-          options={{ tabBarLabel: "Диагностика" }}
-        />
-        <Tab.Screen name="Camera" component={CameraPage} />
-        <Tab.Screen
-          name="MyPlants"
-          component={MyPlants}
-          options={{ tabBarLabel: "Мои растения" }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{ tabBarLabel: "Профиль" }}
-        />
-      </>
-      {/* ) : ( // TODO Убрать тут TabBar */}
-      {/* <>
-        <Tab.Screen
-          name="Authorization"
-          component={Authorization}
-          options={{ tabBarStyle: { display: "none" } }}
-        />
-        <Tab.Screen
-          name="Registration"
-          component={Registration}
-          options={{ tabBarStyle: { display: "none" } }}
-        />
-      </> */}
-      {/* )} */}
+      {isAuthenticated ? (
+        <>
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{ tabBarLabel: "Главная" }}
+          />
+          <Tab.Screen
+            name="Diagnostic"
+            component={Diagnostic}
+            options={{ tabBarLabel: "Диагностика" }}
+          />
+          <Tab.Screen name="Camera" component={CameraPage} />
+          <Tab.Screen
+            name="MyPlants"
+            component={MyPlants}
+            options={{ tabBarLabel: "Мои растения" }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={Profile}
+            options={{ tabBarLabel: "Профиль" }}
+          />
+        </>
+      ) : (
+        <>
+          <Tab.Screen
+            name="Authorization"
+            component={Authorization}
+            options={{ tabBarStyle: { display: "none" } }}
+          />
+          <Tab.Screen
+            name="Registration"
+            component={Registration}
+            options={{ tabBarStyle: { display: "none" } }}
+          />
+        </>
+      )}
     </Tab.Navigator>
   );
 }
