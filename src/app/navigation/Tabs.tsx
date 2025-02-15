@@ -125,6 +125,7 @@ export default function Tabs() {
         </>
       ) : (
         // TODO Убрать тут TabBar
+
         <>
           <Tab.Screen
             name="Authorization"
@@ -166,10 +167,9 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     marginTop: 4,
   },
-  // TODO Сделать кнопку круглой
   // Стили для кнопки "Камера"
   cameraButton: {
-    width: 60, // Увеличиваем размер кнопки
+    maxWidth: 60, // Увеличиваем размер кнопки
     height: 60, // Увеличиваем размер кнопки
     borderRadius: 30, // Половина ширины/высоты для круга
     backgroundColor: "#FFFFFF",
