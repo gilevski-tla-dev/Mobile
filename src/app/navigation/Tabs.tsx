@@ -10,83 +10,9 @@ import { CameraPage } from "@/pages/CameraPage";
 import { Authorization } from "@/pages/Authorization";
 import { MyPlants } from "@/pages/MyPlants";
 import { Diagnostic } from "@/pages/Diagnostic";
+import { CustomTabBar } from "@/shared/ui/CustomTabBar";
 
 const Tab = createBottomTabNavigator();
-
-// Импортируем иконки
-const icons = {
-  Home: require("@/assets/icons/home.png"),
-  Diagnostic: require("@/assets/icons/diagnostic.png"),
-  Camera: require("@/assets/icons/camera.png"),
-  MyPlants: require("@/assets/icons/my-plants.png"),
-  Profile: require("@/assets/icons/profile.png"),
-};
-
-// Кастомный компонент TabBar
-function CustomTabBar({ state, descriptors, navigation }) {
-  return (
-    <View style={styles.tabContainer}>
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
-
-        const isFocused = state.index === index;
-
-        const onPress = () => {
-          const event = navigation.emit({
-            type: "tabPress",
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
-
-        // Получаем иконку для текущего таба
-        const iconSource = icons[route.name];
-
-        // Особый стиль для кнопки "Камера"
-        const isCamera = route.name === "Camera";
-
-        return (
-          <TouchableOpacity
-            key={route.key}
-            onPress={onPress}
-            style={[
-              styles.tabButton,
-              isCamera && styles.cameraButton, // Стиль для кнопки "Камера"
-            ]}
-          >
-            <Image
-              source={iconSource}
-              style={[
-                styles.tabIcon,
-                isCamera && styles.cameraIcon, // Стиль для иконки "Камеры"
-              ]}
-            />
-            {!isCamera && ( // Не отображаем текст для кнопки "Камера"
-              <Text
-                style={[
-                  styles.tabLabel,
-                  { color: isFocused ? "#FFFFFF" : "#A0A0A0" },
-                ]}
-              >
-                {label}
-              </Text>
-            )}
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
-}
 
 export default function Tabs() {
   const isAuthenticated = useSelector(
@@ -99,46 +25,44 @@ export default function Tabs() {
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{ headerShown: false }}
     >
-      {isAuthenticated ? (
-        <>
-          <Tab.Screen
-            name="Home"
-            component={Home}
-            options={{ tabBarLabel: "Главная" }}
-          />
-          <Tab.Screen
-            name="Diagnostic"
-            component={Diagnostic}
-            options={{ tabBarLabel: "Диагностика" }}
-          />
-          <Tab.Screen name="Camera" component={CameraPage} />
-          <Tab.Screen
-            name="MyPlants"
-            component={MyPlants}
-            options={{ tabBarLabel: "Мои растения" }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={Profile}
-            options={{ tabBarLabel: "Профиль" }}
-          />
-        </>
-      ) : (
-        // TODO Убрать тут TabBar
-
-        <>
-          <Tab.Screen
-            name="Authorization"
-            component={Authorization}
-            options={{ tabBarStyle: { display: "none" } }}
-          />
-          <Tab.Screen
-            name="Registration"
-            component={Registration}
-            options={{ tabBarStyle: { display: "none" } }}
-          />
-        </>
-      )}
+      {/* {isAuthenticated ? ( */}
+      <>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{ tabBarLabel: "Главная" }}
+        />
+        <Tab.Screen
+          name="Diagnostic"
+          component={Diagnostic}
+          options={{ tabBarLabel: "Диагностика" }}
+        />
+        <Tab.Screen name="Camera" component={CameraPage} />
+        <Tab.Screen
+          name="MyPlants"
+          component={MyPlants}
+          options={{ tabBarLabel: "Мои растения" }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{ tabBarLabel: "Профиль" }}
+        />
+      </>
+      {/* ) : ( // TODO Убрать тут TabBar */}
+      {/* <>
+        <Tab.Screen
+          name="Authorization"
+          component={Authorization}
+          options={{ tabBarStyle: { display: "none" } }}
+        />
+        <Tab.Screen
+          name="Registration"
+          component={Registration}
+          options={{ tabBarStyle: { display: "none" } }}
+        />
+      </> */}
+      {/* )} */}
     </Tab.Navigator>
   );
 }
