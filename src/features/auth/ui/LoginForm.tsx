@@ -10,13 +10,13 @@ import {
 import { useLogin } from "../hooks/useLogin";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { mutate: login, isPending, isError, error } = useLogin(); // Используем isPending вместо isLoading
 
   const handleLogin = () => {
-    login({ username, password });
+    login({ email, password });
   };
 
   return (
@@ -25,9 +25,9 @@ const LoginForm = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
         autoCapitalize="none"
       />
 
