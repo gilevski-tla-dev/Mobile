@@ -80,7 +80,7 @@ function MainTabs() {
         component={Profile}
         options={{
           tabBarLabel: "Профиль",
-          header: () => <CustomHeader title="Профиль" />,
+          headerShown: false,
         }}
       />
     </Tab.Navigator>
@@ -88,9 +88,11 @@ function MainTabs() {
 }
 
 export default function AppNavigator() {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  // const isAuthenticated = useSelector(
+  //   (state: RootState) => state.auth.isAuthenticated
+  // );
+
+  const isAuthenticated = true;
 
   // Условный рендеринг: показываем либо AuthTabs, либо MainTabs
   return isAuthenticated ? <MainTabs /> : <AuthTabs />;

@@ -1,6 +1,7 @@
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StatusBar } from "expo-status-bar"; // Импортируем StatusBar
 
 export const CameraPage = () => {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -27,6 +28,8 @@ export const CameraPage = () => {
 
   return (
     <View style={styles.container}>
+      {/* Скрываем StatusBar */}
+      <StatusBar backgroundColor="#343434" style="light" />
       <CameraView style={styles.camera} facing={facing}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
