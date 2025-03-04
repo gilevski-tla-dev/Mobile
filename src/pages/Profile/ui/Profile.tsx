@@ -1,46 +1,46 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { StatusBar } from "expo-status-bar";
 
 export const Profile = () => {
-  const [scale] = useState(new Animated.Value(1)); // Начальное значение масштаба
-  const [isPressed, setIsPressed] = useState(false); // Состояние для отслеживания нажатия
-
   const logoutMutation = useLogout();
+  const [avatar, setAvatar] = useState(null);
 
   const handleLogout = () => {
-    logoutMutation.mutate(); // Вызываем мутацию для выхода
+    logoutMutation.mutate();
   };
 
-  const handlePress = () => {
-    // Проверяем, было ли нажатие, и меняем масштаб
-    Animated.spring(scale, {
-      toValue: isPressed ? 1 : 1.5, // Если было нажатие, возвращаем к 1 (нормальный размер), если нет, увеличиваем
-      useNativeDriver: true,
-    }).start();
-
-    setIsPressed(!isPressed); // Переключаем состояние нажатия
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Извините, нам нужно разрешение на доступ к вашей галерее!");
+      return;
+    }
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Профиль</Text>
-
-      <TouchableOpacity onPress={handlePress} style={styles.button}>
-        <Animated.View
-          style={[styles.buttonContainer, { transform: [{ scale }] }]}
-        >
-          <Text style={styles.buttonText}>
-            {isPressed ? "Уменьшить" : "Увеличить"}
-          </Text>
-        </Animated.View>
-      </TouchableOpacity>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={pickImage} style={styles.avatar}>
+          {avatar ? (
+            <Image source={{ uri: avatar }} style={styles.avatarImage} />
+          ) : (
+            <View style={styles.avatarPlaceholder} />
+          )}
+        </TouchableOpacity>
+        <Text>Никита</Text>
+      </View>
       <TouchableOpacity onPress={handleLogout}>
         <Text>Выйти</Text>
       </TouchableOpacity>
@@ -53,47 +53,33 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#F3F2F2",
   },
   header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    width: "100%",
+    height: 150,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    flexDirection: "row",
   },
-  tokenText: {
-    marginBottom: 20,
-    fontSize: 16,
-    color: "#888",
-  },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonContainer: {
-    backgroundColor: "#4CAF50",
+  avatar: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: "#000",
+    marginLeft: 16,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    overflow: "hidden",
   },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
+  avatarImage: {
+    width: "100%",
+    height: "100%",
   },
-  logoutButton: {
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "#FF4C4C", // Красный цвет для кнопки "Выйти"
-    borderRadius: 5,
-  },
-  logoutButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
+  avatarPlaceholder: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#ccc",
   },
 });
