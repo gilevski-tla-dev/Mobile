@@ -1,6 +1,5 @@
 import { handleApiError, postData } from "@/shared/utils/api";
 
-
 // Функция для отправки запроса на /logout
 export const logoutUser = async (accessToken: string): Promise<void> => {
   try {
@@ -12,5 +11,3 @@ export const logoutUser = async (accessToken: string): Promise<void> => {
     throw error;
   }
 };
-
-

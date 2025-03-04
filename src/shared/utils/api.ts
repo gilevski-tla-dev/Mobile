@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 // Первый экземпляр axios с первым baseURL
 const axiosInstance1: AxiosInstance = axios.create({
-  baseURL: "https://d5drmanskpnak11q18rg.g3ab4gln.apigw.yandexcloud.net",
+  baseURL: "https://api.hackcentrifuge.ru",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

@@ -88,11 +88,11 @@ function MainTabs() {
 }
 
 export default function AppNavigator() {
-  // const isAuthenticated = useSelector(
-  //   (state: RootState) => state.auth.isAuthenticated
-  // );
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
 
-  const isAuthenticated = true;
+  // const isAuthenticated = false;
 
   // Условный рендеринг: показываем либо AuthTabs, либо MainTabs
   return isAuthenticated ? <MainTabs /> : <AuthTabs />;

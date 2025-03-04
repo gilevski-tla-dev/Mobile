@@ -5,19 +5,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeStorageItem } from "@/shared/lib/storage";
 import { logoutUser } from "../api/logoutApi";
 
-// Хук для выхода из системы
 export const useLogout = () => {
   const dispatch = useDispatch();
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken); // Получаем токен из Redux
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
   return useMutation<void, Error>({
-    mutationFn: () => logoutUser(accessToken!), // Вызываем logoutUser с токеном
+    mutationFn: async () => {
+      if (!accessToken) {
+        throw new Error("Access token is missing or invalid");
+      }
+      return logoutUser(accessToken);
+    },
     onSuccess: () => {
-      dispatch(logout()); // Деавторизуем пользователя в Redux
-      removeStorageItem("accessToken"); // Удаляем токен из AsyncStorage
+      dispatch(logout());
+      removeStorageItem("accessToken");
     },
     onError: (error) => {
       console.error("Logout failed:", error);
+      // Очищаем состояние, даже если запрос завершился ошибкой
+      dispatch(logout());
+      removeStorageItem("accessToken");
     },
   });
 };
