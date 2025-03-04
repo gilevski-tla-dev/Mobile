@@ -1,4 +1,9 @@
-import { fetchData, deleteData, postData, updateData } from "@/shared/utils/api";
+import {
+  fetchData,
+  deleteData,
+  postData,
+  updateData,
+} from "@/shared/utils/api";
 import {
   useInfiniteQuery,
   useMutation,

@@ -1,7 +1,7 @@
 import { authReducer } from "@/features/auth/model/slice";
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import logger from "redux-logger"; // Импортируем redux-logger
+import logger from "redux-logger";
 
 export const store = configureStore({
   reducer: {
